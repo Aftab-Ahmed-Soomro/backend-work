@@ -1,6 +1,9 @@
+ // To run this on CLI enter cmdline ---> npm run start
+// console.log("Aftab Bhai");
+
 const express = require('express');
 const cors = require("cors");
-const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser')
 require("dotenv").config();
 const connectDB = require("./config/db.js");
 const router = require('./routes');
@@ -13,19 +16,14 @@ app.use(cors({
 app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 
-app.use("/api", router);
+app.use("/api",router);
 
-// Avoid calling app.listen() on Vercel
-let isConnected = false;
+const PORT = process.env.PORT;  
 
-async function handler(req, res) {
-    if (!isConnected) {
-        await connectDB();
-        isConnected = true;
-        console.log("DB connected");
-    }
+// 1st Approach (easy)
 
-    app(req, res);
-}
+connectDB();
 
-module.exports = handler;
+app.listen(PORT,()=> {
+    console.log("Server is running at : " , PORT);
+})
